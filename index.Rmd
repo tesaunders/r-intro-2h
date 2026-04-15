@@ -1,0 +1,24 @@
+---
+title: "Introduction to R for Data Analysis"
+---
+
+[Dr Tom Saunders](https://profiles.auckland.ac.nz/tom-saunders)
+Centre for eResearch  
+University of Auckland
+
+Dr Murray Cadzow 
+University of Otago
+
+Welcome to *Introduction to R for Data Analysis*, a 2 hour workshop designed to introduce the R programming language to researchers who have no programming experience.
+
+# Getting Set Up
+
+Follow the instructions on the [set up](setup.html) page before the workshop.
+
+# Learning Objectives
+
+The primary objective of this workshop is to introduce attendees to the R programming language. By the end of the workshop you will be able to:
+
+- Create basic plots to visualise data in tables/spreadsheets.
+- Explore datasets using vectors, data frames, and functions.
+- Import, manipulate, and export datasets and figures.

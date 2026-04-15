@@ -1,0 +1,158 @@
+---
+title: "Creating plots"
+---
+
+We're going to create some plots using functions from the `ggplot2` package. R packages usually contain functions related to a specific activity, which in this case is data visualisation, and also documentation which outlines how the functions work.
+
+We've already installed the `ggplot2` package. It was installed as part of the `tidyverse` package, which is a popular collection of packages developed by the same group of people. 
+
+# Reading In Data
+
+Each time we start a new RStudio session, we need to load the packages that we want to use, and to do this we use `library()`.
+
+```{r, warning=FALSE}
+library(tidyverse)
+```
+
+After loading packages, the next thing we often need to do is to load some data into R. To load our spreadsheet in we use the `read_csv()` function from the `readr` package (which is loaded as part of the tidyverse package), and we'll store it in an object called `surveys`.`
+
+```{r}
+surveys <- read_csv(file = "data_raw/surveys_complete.csv")
+```
+
+You'll notice some useful information printed in the console, including the number of rows and columns, and the number of different column types. `chr` refers to character, or columns containing text values, while `dbl` refers to double, another name for numeric values.
+
+Now we can see `surveys` in our environment pane and we can click on it to take a look.
+
+This dataset is taken from the Portal Project, a long-term study from Portal, Arizona, in the Chihuahuan desert, which measures features of desert-dwelling mammals. Click on the `surveys` object in the environment pane to see the data.
+
+It's worth pointing out, anything we do to the data in R is not changed in the file we read in. 
+
+To get a bit more information about any object in R, we can look at it's structure:
+
+```{r}
+str(surveys)
+```
+
+# Plotting with ggplot2
+
+The gg in ggplot2 stands for “grammar of graphics”, which refers to a particular way of creating plots using a consistent vocabulary and layering different elements on. Therefore, we only need small changes to our code if the underlying data changes or we decide to make a box plot instead of a scatter plot. This approach helps you create publication-quality plots with minimal adjusting and tweaking.
+
+ggplot plots are built step by step by adding new layers, which allows us to customise and test as we go. We're going to use the following template to build our plots:
+
+`ggplot(data = <DATA>, mapping = aes(<MAPPINGS>)) + <GEOM_FUNCTION>()`
+
+We need to change everything inside `<>`.
+
+First we need to specify the data we want to use. Next, we can see that the ggplot() call has a function nested within it, aes(), which relates to aesthetic mappings. This is where we specify which parts of the data should be mapped to different axes on our plot. Finally, we need to specify the geometry we want to use, or in other words, the plot type. The geometry function we use is added to the end with a `+` sign.
+
+Let's go through step by step:
+
+```{r}
+ggplot(data = surveys)
+```
+
+We get a blank plot because we haven’t told `ggplot()` which variables we want to correspond to parts of the plot.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = weight, y = hindfoot_length))
+```
+
+Now we’ve got a plot with x and y axes corresponding to variables from surveys. However, we haven’t specified how we want the data to be displayed. We do this using `geom_` functions, which specify the type of geometry we want, such as points, lines, or bars. We can add a `geom_point()` layer to our plot by using the + sign. We indent onto a new line to make it easier to read, and we have to end the first line with the + sign.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point()
+```
+
+You may notice a warning that missing values were removed. If a variable necessary to make the plot is missing from a given row of data (in this case, hindfoot_length or weight), that observation can't be plotted. `ggplot2` warns us that this has happened to ensure we know there are missing values.
+
+Another common type of message is an error, which means R can't execute the command. This is commonly due to misspelling, or missing punctuation such as brackets or commas.
+
+We can change the colour of the points by supplying a `colour` argument inside the geometry function.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(colour = "blue")
+```
+
+We can also change the transparency of points to get a better idea of where data is concentrated. Here we change transparency of points to 20%.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = weight, y = hindfoot_length)) +
+  geom_point(colour = "blue", alpha = 0.2)
+```
+
+# Boxplots
+
+Boxplots are useful for examining the skew of numeric data. Let's look at `hindfoot_length` with `plot_type` on the x axis.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot()
+```
+
+We can flip the plot around to make it easier to read longer labels with `coord_flip()`.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  coord_flip()
+```
+
+If we wanted to examine our data grouped by sex, we could facet the data into separate plots for each sex. We do this using the `facet_wrap()` function, and inside it we supply the column we want to facet by within the `vars()` function. We can also specify how we want the plots to be arranged by supplying either `nrow` or `ncol`.
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  coord_flip() +
+  facet_wrap(vars(sex), ncol = 1)
+```
+
+# Changing themes
+
+To go from our initial plot, to a publication-ready figure we often neeed to change aspects of the plot's theme. We can use some themes built in to ggplot to change lots of things at once.  
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  coord_flip() +
+  theme_bw()
+```
+
+The background is no longer grey and each panel has a black border
+
+# Changing labels
+
+To set a plot title and change our axis titles in one go we can use the `labs()` function:
+
+```{r}
+ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  coord_flip() +
+  theme_bw() +
+  labs(title = "Rodent size differs based on sampling plot",
+       x = "Plot type",
+       y = "Hindfoot length (mm)")
+```
+
+# Exporting plots
+
+Once we're happy with our plot, we can assign it to an object and then save it using the `ggsave()` function. 
+
+We need to specify the following arguments:
+
+- `filename`: the filename we're using to save our plot, including the file type of the image (e.g. ".jpg", ".png", ".tif". 
+- `plot`: the name of the plot object we want to save.
+
+```{r, eval=FALSE}
+plot_hf <- ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
+  geom_boxplot() +
+  coord_flip() +
+  theme_bw() +
+  labs(title = "Rodent size differs based on sampling plot",
+       x = "Plot type",
+       y = "Hindfoot length (mm)")
+
+ggsave("figures/hindfoot.png", plot = plot_hf)
+```

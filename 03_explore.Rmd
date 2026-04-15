@@ -1,0 +1,99 @@
+---
+title: "R data types"
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+surveys <- read_csv(file = "data_raw/surveys_complete.csv")
+```
+
+We've learned how to create visualisations from the `surveys` data, but what actually is `surveys`? R commonly stores tabular data in data.frames, and that is how the `surveys` data is stored. It’s useful to understand how R thinks about, represents, and stores data in order for us to have a productive working relationship with R.
+
+We can get more information about an object by using the str() function:
+
+```{r}
+str(surveys)
+```
+
+The `$` in front of each variable acts as an important operator in R. We can use it to select different columns within a data frame. If we type the name of a data frame followed by a `$`, RStudio will offer tab completion to select a variable within the data from a list by navigating up and down with the arrow keys and hitting enter, or by clicking on the variable you want. 
+
+```{r}
+print(surveys$year, max = 20)
+```
+
+# Vectors
+
+The `year` column we just printed is referred to as a vector by R. While data.frames are made up of columns and rows, vectors are 1-dimensional series of values. Each column in a data.frame is actually a vector. Vectors are the basic building blocks of all data in R.
+
+There are 4 main types of vectors (also known as atomic vectors):
+
+1. "character" for strings of characters, like our `genus` or `sex` columns. Each entry in a character vector is wrapped in quotes. In other programming languages, this type of data may be referred to as “strings”.
+
+2. "integer" for integers (whole numbers). You may sometimes see integers represented like 2L or 20L. The L indicates to R that it is an integer, instead of the next data type, "numeric".
+
+3. "numeric", aka "double", vectors can contain numbers including decimals. Other languages may refer to these as “float” or “floating point” numbers.
+
+4. "logical" for TRUE and FALSE, which can also be represented as T and F. In other contexts, these may be referred to as “Boolean” data. Note these values are not quoted as R recognises them as logical values.
+
+Vectors can only be of a single type. Since each column in a data.frame is a vector, this means an accidental character following a number, like '29i', can change the type of the whole vector. If you're working with messy data it's useful to check the vector types of each column to ensure they are all what you are expecting, otherwise it could indicate a typo in one of the values.
+
+To create a vector from scratch, we can use the `c()` function, putting values inside, separated by commas.
+
+```{r}
+num <- c(1, 2, 5, 12, 4)
+class(num)
+```
+
+We see that num is a numeric vector.
+
+Let’s try making a character vector.
+
+```{r}
+char <- c("apple", "pear", "grape")
+class(char)
+```
+
+Remember that each entry, like "apple", needs to be surrounded by quotes, and entries are separated with commas. If you do something like "apple, pear, grape", you will have only a single entry containing that whole string.
+
+Finally, let’s make a logical vector.
+
+```{r}
+logi <- c(TRUE, FALSE, TRUE, TRUE)
+class(logi)
+```
+
+# Missing data
+
+There is an important distinction between 0 and a missing value. A 0 means a 0 was observed, whereas a missing value means there was no observation recorded. R represents missing data as NA, without quotes, in vectors of any type.
+
+Let’s make a numeric vector with an NA value
+
+```{r}
+weights <- c(25, 34, 12, NA, 42)
+```
+
+R doesn’t make assumptions about how you want to handle missing data, so if we pass this vector to a numeric function like `min()` to get the minimum value, it won’t know what to do, so it returns NA.
+
+```{r}
+min(weights)
+```
+
+This is a very good thing, since we won’t accidentally forget to consider our missing data. If we decide to exclude our missing values, many basic mathematical functions have an argument to remove them.
+
+```{r}
+min(weights, na.rm = TRUE)
+```
+
+# Vectors as arguments
+
+A common use of vectors is to pass them as arguments in functions. The `median()` function calculates the median of a a set of values. We also need to set `na.rm = TRUE`, since there are NA values in the `weight` column.
+
+```{r}
+median(surveys$weight, na.rm = TRUE)
+```
+
+Or we could pass this column to `hist()` to generate a quick histogram of weights, which is useful to check the skew of the data.
+
+```{r}
+hist(surveys$weight)
+```

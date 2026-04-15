@@ -1,0 +1,167 @@
+---
+title: "Manipulating data"
+---
+
+```{r, echo=FALSE, message=FALSE}
+library(tidyverse)
+surveys <- read_csv(file = "data_raw/surveys_complete.csv")
+```
+
+Why aren't we using Excel files?
+
+You may have noticed we're using a .csv files, which are plain text spreadsheet files. We're doing this for a number of reasons:
+
+- Using a plain text data format means the data can be opened, modified, and saved by a wide range of software - even your operating system's text editor. This increases the chance the data will be useable into the future when proprietary software like Excel may not exist any more. 
+- Using a plain text format also removes any extraneous formatting that may have been entered when using something like Excel. Highlighting, notes in the margin, merged cells, and multiple tables in a single sheet may mean the file cannot be opened by software like R, and are all examples of things that should be handled differently to preserve data integrity (for example keeping metadata and notes ina a README instead).
+- Working with Excel files is possible in R but it requires installing and loading another package (popular options include readxl/writexl and openxlsx), which increases the dependencies in your code. In order to read multiple files in using these packages it's necessary to use more complicated methods.
+
+# Manipulating data
+
+One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The `dplyr` and `tidyr` packages in the `tidyverse` provide a series of powerful functions for many common data manipulation tasks.
+
+## `select()`
+
+Narrows down a data.frame to specific columns. To use the `select()` function, the first argument is the name of the data.frame, and the rest of the arguments are unquoted names of the columns you want.
+
+```{r}
+select(surveys, plot_id, species_id, hindfoot_length)
+```
+
+
+The columns are arranged in the order we specified inside select().
+
+To select all columns except specific columns, put a - in front of the column you want to exclude.
+
+```{r}
+select(surveys, -record_id, -year)
+```
+
+select() also works with numeric vectors for the order of the columns. To select the 3rd, 4th, 5th, and 10th columns, we could run the following code.
+
+Finally, you can select columns based on whether they match a certain criteria by using the `where()` function. If we want all numeric columns, we can ask to select all the columns where the class is numeric.
+
+```{r}
+select(surveys, where(is.numeric))
+```
+
+Instead of giving names or positions of columns, we instead pass the where() function with the name of another function inside it, in this case is.numeric(), and we get all the columns for which that function returns TRUE.
+
+We omit the opening and closing brackets from as.numeric() here because we're passing it as an instruction to be used later by the outer function, rather than running it immediately.
+
+We can use this technique to select any columns that have any NA values in them too.
+
+```{r}
+select(surveys, where(anyNA))
+```
+
+## `filter()`
+
+Narrows down a data.frame to specific rows based on certain critera. To get all the rows where the value of year is equal to 1985, we would run the following.
+
+```{r}
+filter(surveys, year == 1985)
+```
+
+The `==` sign means “is equal to”. There are several other operators we can use: 
+- > (greater than)
+- >= (greater than or equal to)
+- < (less than)
+- <= (less than or equal to)
+- != (not equal to)
+
+Another useful operator is `%in%`, which checks if a specified set of values are present in a vector. For example, we can get rows with specific `species_id` values.
+
+```{r}
+filter(surveys, species_id %in% c("RM", "DO"))
+```
+
+We can also use multiple conditions in one `filter()` statement. Here we will get rows with a year less than or equal to 1988 and whose hindfoot length values are not NA. The `!` before the `is.na()` function means “not”.
+
+```{r}
+filter(surveys, year <= 1988 & !is.na(hindfoot_length))
+```
+
+## The pipe `|>` 
+
+What happens if we want to both `select()` and `filter()` our data?  
+
+Rather than nesting functions inside each other, or creating lots of intermediate objects, we can instead use an elegant solution called the pipe operator. It looks like |>. You can insert it by using the keyboard shortcut `Shift+Cmd+M` (Mac) or `Shift+Ctrl+M` (Windows). Here’s how you could use a pipe to select and filter in one step:
+
+```{r}
+surveys |> 
+  select(-day) |>  
+  filter(month >= 7)
+```
+
+The pipe takes the thing on the lefthand side and inserts it as the first argument of the function on the righthand side. By putting each of our functions onto a new line, we can build a nice, readable pipeline. 
+
+It can be useful to think of this as a little assembly line for our data. It starts at the top and gets piped into a `select()` function, and it comes out modified somewhat. It then gets sent into the `filter()` function, where it is further modified, and then the final product gets printed out to our console. It can also be helpful to think of `|>`  as meaning “and then”. Since many tidyverse functions have verbs for names, a pipeline can be read like a sentence.
+
+If we want to store this final product as an object, we use an assignment arrow at the start.
+
+```{r}
+surveys_sub <- surveys |>  
+  select(-day) |> 
+  filter(month >= 7)
+```
+
+A good approach is to build a pipeline step by step prior to assignment. You add functions to the pipeline as you go, with the results printing in the console for you to view. Once you’re satisfied with your final result, go back and add the assignment arrow statement at the start. This approach is very interactive, allowing you to see the results of each step as you build the pipeline, and produces nicely readable code.
+
+You may also see the older style pipe in code online: `%>%`. This was widely used before a native pipe |> was introduced in R 4.1.0 in May 2021. The two pipes are quite similar but there are a [few differences](https://tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/) we won't get into here.
+
+## New columns with `mutate()`
+
+Creating new columns based on existing columns is a common task during data analysis. For example, we could add a new column that has the weight in kilograms instead of grams.
+
+```{r}
+surveys |> 
+  mutate(weight_kg = weight / 1000)
+```
+
+You can create multiple columns in one mutate() call, and they will get created in the order you write them. This means you can even reference the first new column in the second new column:
+
+```{r}
+surveys |> 
+  mutate(weight_kg = weight / 1000,
+         weight_lbs = weight_kg * 2.2)
+```
+
+# The split-apply-combine approach
+
+Many data analysis tasks can be achieved using the split-apply-combine approach: split the data into groups, apply some analysis to each group, and combine the results in some way. `dplyr` has a few convenient functions to enable this approach, mainly `group_by()` and `summarise()`.
+
+`group_by()` takes a data.frame and the name of one or more columns with categorical values that define the groups. `summarize()` then collapses each group into a one-row summary of the group, giving you back a data.frame with one row per group. The syntax for `summarize()` is similar to `mutate()`, where you define new columns based on values of other columns. Let’s try calculating the mean weight of all our animals by sex.
+
+```{r}
+surveys |> 
+  group_by(sex) |> 
+  summarise(mean_weight = mean(weight, na.rm = T))
+```
+
+You can see that the mean weight for males is slightly higher than for females, but that animals whose sex is unknown have much higher weights. This is probably due to small sample size, but we should check to be sure. Like `mutate()`, we can define multiple columns in one `summarise()` call. The function `n()` will count the number of rows in each group.
+
+```{r}
+surveys |> 
+  group_by(sex) |>  
+  summarise(mean_weight = mean(weight, na.rm = T),
+            n = n())
+```
+
+# Exporting data
+
+Let's say we want to export this summary table so we can submit it with a manuscript to include in a publication. 
+
+Similar to saving plots, we first need to assign it to an object and then export it.
+
+```{r}
+mean_weight <- surveys |> 
+  group_by(sex) |>  
+  summarise(mean_weight = mean(weight, na.rm = T),
+            n = n())
+```
+
+Now we can save this data.frame to a CSV using the `write_csv()` function from the readr package. The first argument is the name of the data.frame, and the second is the path to the new file we want to create, including the file extension `.csv`.
+
+```{r}
+write_csv(x = mean_weight, file = "figures/table_mean_weight.csv")
+```
