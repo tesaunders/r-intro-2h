@@ -9,7 +9,7 @@ surveys <- read_csv(file = "data_raw/surveys_complete.csv")
 
 Why aren't we using Excel files?
 
-You may have noticed we're using a .csv files, which are plain text spreadsheet files. We're doing this for a number of reasons:
+You may have noticed we're using a .csv file, which is a plain text spreadsheet file. We're doing this for a number of reasons:
 
 - Using a plain text data format means the data can be opened, modified, and saved by a wide range of software - even your operating system's text editor. This increases the chance the data will be useable into the future when proprietary software like Excel may not exist any more. 
 - Using a plain text format also removes any extraneous formatting that may have been entered when using something like Excel. Highlighting, notes in the margin, merged cells, and multiple tables in a single sheet may mean the file cannot be opened by software like R, and are all examples of things that should be handled differently to preserve data integrity (for example keeping metadata and notes ina a README instead).

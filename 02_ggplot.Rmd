@@ -14,7 +14,7 @@ Each time we start a new RStudio session, we need to load the packages that we w
 library(tidyverse)
 ```
 
-After loading packages, the next thing we often need to do is to load some data into R. To load our spreadsheet in we use the `read_csv()` function from the `readr` package (which is loaded as part of the tidyverse package), and we'll store it in an object called `surveys`.`
+After loading packages, the next thing we often need to do is to load some data into R. To load our spreadsheet in we use the `read_csv()` function from the `readr` package (which is loaded as part of the tidyverse package), and we'll store it in an object called `surveys`.
 
 ```{r}
 surveys <- read_csv(file = "data_raw/surveys_complete.csv")

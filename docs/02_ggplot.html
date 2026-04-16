@@ -131,19 +131,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./01_rstudio.html"> 
-<span class="menu-text">1. Introduction to R &amp; RStudio</span></a>
+<span class="menu-text">1. R &amp; RStudio</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./02_ggplot.html" aria-current="page"> 
-<span class="menu-text">2. Creating plots</span></a>
+<span class="menu-text">2. Plots</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./03_explore.html"> 
-<span class="menu-text">3. R data types</span></a>
+<span class="menu-text">3. Data types</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./04_dplyr.html"> 
-<span class="menu-text">4. Manipulating data</span></a>
+<span class="menu-text">4. Analysis</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./resources.html"> 
@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
 </div>
 </div>
-<p>After loading packages, the next thing we often need to do is to load some data into R. To load our spreadsheet in we use the <code>read_csv()</code> function from the <code>readr</code> package (which is loaded as part of the tidyverse package), and we’ll store it in an object called <code>surveys</code>.`</p>
+<p>After loading packages, the next thing we often need to do is to load some data into R. To load our spreadsheet in we use the <code>read_csv()</code> function from the <code>readr</code> package (which is loaded as part of the tidyverse package), and we’ll store it in an object called <code>surveys</code>.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="at">file =</span> <span class="st">"data_raw/surveys_complete.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
