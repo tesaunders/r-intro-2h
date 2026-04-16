@@ -3,7 +3,7 @@ title: "Introduction to R for Data Analysis"
 ---
 
 [Dr Tom Saunders](https://profiles.auckland.ac.nz/tom-saunders)\
-Centre for eResearch\  
+Centre for eResearch\
 University of Auckland
 
 Dr Murray Cadzow\
