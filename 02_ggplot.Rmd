@@ -100,15 +100,6 @@ ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
   coord_flip()
 ```
 
-If we wanted to examine our data grouped by sex, we could facet the data into separate plots for each sex. We do this using the `facet_wrap()` function, and inside it we supply the column we want to facet by within the `vars()` function. We can also specify how we want the plots to be arranged by supplying either `nrow` or `ncol`.
-
-```{r}
-ggplot(data = surveys, mapping = aes(x = plot_type, y = hindfoot_length)) +
-  geom_boxplot() +
-  coord_flip() +
-  facet_wrap(vars(sex), ncol = 1)
-```
-
 # Changing themes
 
 To go from our initial plot, to a publication-ready figure we often neeed to change aspects of the plot's theme. We can use some themes built in to ggplot to change lots of things at once.  

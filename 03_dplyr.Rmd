@@ -7,17 +7,19 @@ library(tidyverse)
 surveys <- read_csv(file = "data_raw/surveys_complete.csv")
 ```
 
-Why aren't we using Excel files?
+We've learned how to create visualisations from the `surveys` data, but what actually is `surveys`? R commonly stores tabular data in data.frames, and that is how the `surveys` data is stored. 
 
-You may have noticed we're using a .csv file, which is a plain text spreadsheet file. We're doing this for a number of reasons:
+We can get more information about an object by using the str() function:
 
-- Using a plain text data format means the data can be opened, modified, and saved by a wide range of software - even your operating system's text editor. This increases the chance the data will be useable into the future when proprietary software like Excel may not exist any more. 
-- Using a plain text format also removes any extraneous formatting that may have been entered when using something like Excel. Highlighting, notes in the margin, merged cells, and multiple tables in a single sheet may mean the file cannot be opened by software like R, and are all examples of things that should be handled differently to preserve data integrity (for example keeping metadata and notes ina a README instead).
-- Working with Excel files is possible in R but it requires installing and loading another package (popular options include readxl/writexl and openxlsx), which increases the dependencies in your code. In order to read multiple files in using these packages it's necessary to use more complicated methods.
+```{r}
+str(surveys)
+```
+
+The `$` in front of each variable acts as an important operator in R. We can use it to select different columns within a data frame. If we type the name of a data frame followed by a `$`, RStudio will offer tab completion to select a variable within the data from a list by navigating up and down with the arrow keys and hitting enter, or by clicking on the variable you want. 
 
 # Manipulating data
 
-One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The `dplyr` and `tidyr` packages in the `tidyverse` provide a series of powerful functions for many common data manipulation tasks.
+One of the most important skills for working with data in R is the ability to manipulate data. The `dplyr` package in the `tidyverse` provide a series of powerful functions for many common data manipulation tasks.
 
 ## `select()`
 
@@ -26,7 +28,6 @@ Narrows down a data.frame to specific columns. To use the `select()` function, t
 ```{r}
 select(surveys, plot_id, species_id, hindfoot_length)
 ```
-
 
 The columns are arranged in the order we specified inside select().
 
@@ -37,22 +38,6 @@ select(surveys, -record_id, -year)
 ```
 
 select() also works with numeric vectors for the order of the columns. To select the 3rd, 4th, 5th, and 10th columns, we could run the following code.
-
-Finally, you can select columns based on whether they match a certain criteria by using the `where()` function. If we want all numeric columns, we can ask to select all the columns where the class is numeric.
-
-```{r}
-select(surveys, where(is.numeric))
-```
-
-Instead of giving names or positions of columns, we instead pass the where() function with the name of another function inside it, in this case is.numeric(), and we get all the columns for which that function returns TRUE.
-
-We omit the opening and closing brackets from as.numeric() here because we're passing it as an instruction to be used later by the outer function, rather than running it immediately.
-
-We can use this technique to select any columns that have any NA values in them too.
-
-```{r}
-select(surveys, where(anyNA))
-```
 
 ## `filter()`
 

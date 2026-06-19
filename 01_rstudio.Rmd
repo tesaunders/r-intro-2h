@@ -188,3 +188,40 @@ round(3.1412, 2)
 ```
 
 But it makes your code clearer to name arguments, especially when you're learning.
+
+# Vectors
+
+Vectors are 1-dimensional series of values, and vectors are the basic building blocks of all data in R.
+
+There are 2 common types of vectors:
+
+1. "character" for strings of characters (letters). Each entry in a character vector is wrapped in quotes.
+
+2. "numeric" vectors contain numbers including decimals. 
+
+To create a vector from scratch, we can use the `c()` function, putting values inside, separated by commas.
+
+```{r}
+age <- c(1, 2, 5, 12, 4)
+fruit <- c("apple", "pear", "grape")
+```
+
+# Missing data
+
+There is an important distinction between 0 and a missing value. A 0 means a 0 was observed, whereas a missing value means there was no observation recorded. R represents missing data as NA, without quotes, in all vector types.
+
+```{r}
+weights <- c(25, 34, 12, NA, 42)
+```
+
+R doesn’t make assumptions about how you want to handle missing data, so if we pass this vector to a numeric function like `mean()` to get the minimum value, it won’t know what to do, so it returns NA.
+
+```{r}
+mean(weights)
+```
+
+This is a very good thing, since we won’t accidentally forget to consider our missing data. If we decide to exclude our missing values, many basic mathematical functions have an argument to remove them.
+
+```{r}
+min(weights, na.rm = TRUE)
+```

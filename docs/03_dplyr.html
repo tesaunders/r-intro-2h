@@ -138,12 +138,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">2. Plots</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./03_explore.html"> 
-<span class="menu-text">3. Data types</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link active" href="./04_dplyr.html" aria-current="page"> 
-<span class="menu-text">4. Analysis</span></a>
+    <a class="nav-link active" href="./03_dplyr.html" aria-current="page"> 
+<span class="menu-text">3. Analysis</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./resources.html"> 
@@ -183,21 +179,53 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>Why aren’t we using Excel files?</p>
-<p>You may have noticed we’re using a .csv file, which is a plain text spreadsheet file. We’re doing this for a number of reasons:</p>
-<ul>
-<li>Using a plain text data format means the data can be opened, modified, and saved by a wide range of software - even your operating system’s text editor. This increases the chance the data will be useable into the future when proprietary software like Excel may not exist any more.</li>
-<li>Using a plain text format also removes any extraneous formatting that may have been entered when using something like Excel. Highlighting, notes in the margin, merged cells, and multiple tables in a single sheet may mean the file cannot be opened by software like R, and are all examples of things that should be handled differently to preserve data integrity (for example keeping metadata and notes ina a README instead).</li>
-<li>Working with Excel files is possible in R but it requires installing and loading another package (popular options include readxl/writexl and openxlsx), which increases the dependencies in your code. In order to read multiple files in using these packages it’s necessary to use more complicated methods.</li>
-</ul>
+<p>We’ve learned how to create visualisations from the <code>surveys</code> data, but what actually is <code>surveys</code>? R commonly stores tabular data in data.frames, and that is how the <code>surveys</code> data is stored.</p>
+<p>We can get more information about an object by using the str() function:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">str</span>(surveys)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>spc_tbl_ [16,878 × 13] (S3: spec_tbl_df/tbl_df/tbl/data.frame)
+ $ record_id      : num [1:16878] 1 2 3 4 5 6 7 8 9 10 ...
+ $ month          : num [1:16878] 7 7 7 7 7 7 7 7 7 7 ...
+ $ day            : num [1:16878] 16 16 16 16 16 16 16 16 16 16 ...
+ $ year           : num [1:16878] 1977 1977 1977 1977 1977 ...
+ $ plot_id        : num [1:16878] 2 3 2 7 3 1 2 1 1 6 ...
+ $ species_id     : chr [1:16878] "NL" "NL" "DM" "DM" ...
+ $ sex            : chr [1:16878] "M" "M" "F" "M" ...
+ $ hindfoot_length: num [1:16878] 32 33 37 36 35 14 NA 37 34 20 ...
+ $ weight         : num [1:16878] NA NA NA NA NA NA NA NA NA NA ...
+ $ genus          : chr [1:16878] "Neotoma" "Neotoma" "Dipodomys" "Dipodomys" ...
+ $ species        : chr [1:16878] "albigula" "albigula" "merriami" "merriami" ...
+ $ taxa           : chr [1:16878] "Rodent" "Rodent" "Rodent" "Rodent" ...
+ $ plot_type      : chr [1:16878] "Control" "Long-term Krat Exclosure" "Control" "Rodent Exclosure" ...
+ - attr(*, "spec")=
+  .. cols(
+  ..   record_id = col_double(),
+  ..   month = col_double(),
+  ..   day = col_double(),
+  ..   year = col_double(),
+  ..   plot_id = col_double(),
+  ..   species_id = col_character(),
+  ..   sex = col_character(),
+  ..   hindfoot_length = col_double(),
+  ..   weight = col_double(),
+  ..   genus = col_character(),
+  ..   species = col_character(),
+  ..   taxa = col_character(),
+  ..   plot_type = col_character()
+  .. )
+ - attr(*, "problems")=&lt;pointer: 0x0000025f266fe1c0&gt; </code></pre>
+</div>
+</div>
+<p>The <code>$</code> in front of each variable acts as an important operator in R. We can use it to select different columns within a data frame. If we type the name of a data frame followed by a <code>$</code>, RStudio will offer tab completion to select a variable within the data from a list by navigating up and down with the arrow keys and hitting enter, or by clicking on the variable you want.</p>
 <section id="manipulating-data" class="level1">
 <h1>Manipulating data</h1>
-<p>One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The <code>dplyr</code> and <code>tidyr</code> packages in the <code>tidyverse</code> provide a series of powerful functions for many common data manipulation tasks.</p>
+<p>One of the most important skills for working with data in R is the ability to manipulate data. The <code>dplyr</code> package in the <code>tidyverse</code> provide a series of powerful functions for many common data manipulation tasks.</p>
 <section id="select" class="level2">
 <h2 class="anchored" data-anchor-id="select"><code>select()</code></h2>
 <p>Narrows down a data.frame to specific columns. To use the <code>select()</code> function, the first argument is the name of the data.frame, and the rest of the arguments are unquoted names of the columns you want.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(surveys, plot_id, species_id, hindfoot_length)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(surveys, plot_id, species_id, hindfoot_length)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16,878 × 3
    plot_id species_id hindfoot_length
@@ -218,7 +246,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The columns are arranged in the order we specified inside select().</p>
 <p>To select all columns except specific columns, put a - in front of the column you want to exclude.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(surveys, <span class="sc">-</span>record_id, <span class="sc">-</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(surveys, <span class="sc">-</span>record_id, <span class="sc">-</span>year)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16,878 × 11
    month   day plot_id species_id sex   hindfoot_length weight genus     species
@@ -238,54 +266,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>select() also works with numeric vectors for the order of the columns. To select the 3rd, 4th, 5th, and 10th columns, we could run the following code.</p>
-<p>Finally, you can select columns based on whether they match a certain criteria by using the <code>where()</code> function. If we want all numeric columns, we can ask to select all the columns where the class is numeric.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(surveys, <span class="fu">where</span>(is.numeric))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 16,878 × 7
-   record_id month   day  year plot_id hindfoot_length weight
-       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;           &lt;dbl&gt;  &lt;dbl&gt;
- 1         1     7    16  1977       2              32     NA
- 2         2     7    16  1977       3              33     NA
- 3         3     7    16  1977       2              37     NA
- 4         4     7    16  1977       7              36     NA
- 5         5     7    16  1977       3              35     NA
- 6         6     7    16  1977       1              14     NA
- 7         7     7    16  1977       2              NA     NA
- 8         8     7    16  1977       1              37     NA
- 9         9     7    16  1977       1              34     NA
-10        10     7    16  1977       6              20     NA
-# ℹ 16,868 more rows</code></pre>
-</div>
-</div>
-<p>Instead of giving names or positions of columns, we instead pass the where() function with the name of another function inside it, in this case is.numeric(), and we get all the columns for which that function returns TRUE.</p>
-<p>We omit the opening and closing brackets from as.numeric() here because we’re passing it as an instruction to be used later by the outer function, rather than running it immediately.</p>
-<p>We can use this technique to select any columns that have any NA values in them too.</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">select</span>(surveys, <span class="fu">where</span>(anyNA))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 16,878 × 7
-   species_id sex   hindfoot_length weight genus       species  taxa  
-   &lt;chr&gt;      &lt;chr&gt;           &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;    &lt;chr&gt; 
- 1 NL         M                  32     NA Neotoma     albigula Rodent
- 2 NL         M                  33     NA Neotoma     albigula Rodent
- 3 DM         F                  37     NA Dipodomys   merriami Rodent
- 4 DM         M                  36     NA Dipodomys   merriami Rodent
- 5 DM         M                  35     NA Dipodomys   merriami Rodent
- 6 PF         M                  14     NA Perognathus flavus   Rodent
- 7 PE         F                  NA     NA Peromyscus  eremicus Rodent
- 8 DM         M                  37     NA Dipodomys   merriami Rodent
- 9 DM         F                  34     NA Dipodomys   merriami Rodent
-10 PF         F                  20     NA Perognathus flavus   Rodent
-# ℹ 16,868 more rows</code></pre>
-</div>
-</div>
 </section>
 <section id="filter" class="level2">
 <h2 class="anchored" data-anchor-id="filter"><code>filter()</code></h2>
 <p>Narrows down a data.frame to specific rows based on certain critera. To get all the rows where the value of year is equal to 1985, we would run the following.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, year <span class="sc">==</span> <span class="dv">1985</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, year <span class="sc">==</span> <span class="dv">1985</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,438 × 13
    record_id month   day  year plot_id species_id sex   hindfoot_length weight
@@ -307,7 +293,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The <code>==</code> sign means “is equal to”. There are several other operators we can use: - &gt; (greater than) - &gt;= (greater than or equal to) - &lt; (less than) - &lt;= (less than or equal to) - != (not equal to)</p>
 <p>Another useful operator is <code>%in%</code>, which checks if a specified set of values are present in a vector. For example, we can get rows with specific <code>species_id</code> values.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, species_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"RM"</span>, <span class="st">"DO"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, species_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"RM"</span>, <span class="st">"DO"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 2,835 × 13
    record_id month   day  year plot_id species_id sex   hindfoot_length weight
@@ -328,7 +314,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>We can also use multiple conditions in one <code>filter()</code> statement. Here we will get rows with a year less than or equal to 1988 and whose hindfoot length values are not NA. The <code>!</code> before the <code>is.na()</code> function means “not”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, year <span class="sc">&lt;=</span> <span class="dv">1988</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(hindfoot_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, year <span class="sc">&lt;=</span> <span class="dv">1988</span> <span class="sc">&amp;</span> <span class="sc">!</span><span class="fu">is.na</span>(hindfoot_length))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 12,779 × 13
    record_id month   day  year plot_id species_id sex   hindfoot_length weight
@@ -353,9 +339,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>What happens if we want to both <code>select()</code> and <code>filter()</code> our data?</p>
 <p>Rather than nesting functions inside each other, or creating lots of intermediate objects, we can instead use an elegant solution called the pipe operator. It looks like |&gt;. You can insert it by using the keyboard shortcut <code>Shift+Cmd+M</code> (Mac) or <code>Shift+Ctrl+M</code> (Windows). Here’s how you could use a pipe to select and filter in one step:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>day) <span class="sc">|&gt;</span>  </span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>day) <span class="sc">|&gt;</span>  </span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 8,244 × 12
    record_id month  year plot_id species_id sex   hindfoot_length weight genus  
@@ -378,9 +364,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>It can be useful to think of this as a little assembly line for our data. It starts at the top and gets piped into a <code>select()</code> function, and it comes out modified somewhat. It then gets sent into the <code>filter()</code> function, where it is further modified, and then the final product gets printed out to our console. It can also be helpful to think of <code>|&gt;</code> as meaning “and then”. Since many tidyverse functions have verbs for names, a pipeline can be read like a sentence.</p>
 <p>If we want to store this final product as an object, we use an assignment arrow at the start.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>surveys_sub <span class="ot">&lt;-</span> surveys <span class="sc">|&gt;</span>  </span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>day) <span class="sc">|&gt;</span> </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>surveys_sub <span class="ot">&lt;-</span> surveys <span class="sc">|&gt;</span>  </span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>day) <span class="sc">|&gt;</span> </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(month <span class="sc">&gt;=</span> <span class="dv">7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>A good approach is to build a pipeline step by step prior to assignment. You add functions to the pipeline as you go, with the results printing in the console for you to view. Once you’re satisfied with your final result, go back and add the assignment arrow statement at the start. This approach is very interactive, allowing you to see the results of each step as you build the pipeline, and produces nicely readable code.</p>
 <p>You may also see the older style pipe in code online: <code>%&gt;%</code>. This was widely used before a native pipe |&gt; was introduced in R 4.1.0 in May 2021. The two pipes are quite similar but there are a <a href="https://tidyverse.org/blog/2023/04/base-vs-magrittr-pipe/">few differences</a> we won’t get into here.</p>
@@ -389,8 +375,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="new-columns-with-mutate">New columns with <code>mutate()</code></h2>
 <p>Creating new columns based on existing columns is a common task during data analysis. For example, we could add a new column that has the weight in kilograms instead of grams.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_kg =</span> weight <span class="sc">/</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_kg =</span> weight <span class="sc">/</span> <span class="dv">1000</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16,878 × 14
    record_id month   day  year plot_id species_id sex   hindfoot_length weight
@@ -412,9 +398,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>You can create multiple columns in one mutate() call, and they will get created in the order you write them. This means you can even reference the first new column in the second new column:</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_kg =</span> weight <span class="sc">/</span> <span class="dv">1000</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">weight_lbs =</span> weight_kg <span class="sc">*</span> <span class="fl">2.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">weight_kg =</span> weight <span class="sc">/</span> <span class="dv">1000</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">weight_lbs =</span> weight_kg <span class="sc">*</span> <span class="fl">2.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 16,878 × 15
    record_id month   day  year plot_id species_id sex   hindfoot_length weight
@@ -441,9 +427,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Many data analysis tasks can be achieved using the split-apply-combine approach: split the data into groups, apply some analysis to each group, and combine the results in some way. <code>dplyr</code> has a few convenient functions to enable this approach, mainly <code>group_by()</code> and <code>summarise()</code>.</p>
 <p><code>group_by()</code> takes a data.frame and the name of one or more columns with categorical values that define the groups. <code>summarize()</code> then collapses each group into a one-row summary of the group, giving you back a data.frame with one row per group. The syntax for <code>summarize()</code> is similar to <code>mutate()</code>, where you define new columns based on values of other columns. Let’s try calculating the mean weight of all our animals by sex.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span> </span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 2
   sex   mean_weight
@@ -455,10 +441,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>You can see that the mean weight for males is slightly higher than for females, but that animals whose sex is unknown have much higher weights. This is probably due to small sample size, but we should check to be sure. Like <code>mutate()</code>, we can define multiple columns in one <code>summarise()</code> call. The function <code>n()</code> will count the number of rows in each group.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span>  </span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T),</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span>  </span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T),</span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 3 × 3
   sex   mean_weight     n
@@ -474,14 +460,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s say we want to export this summary table so we can submit it with a manuscript to include in a publication.</p>
 <p>Similar to saving plots, we first need to assign it to an object and then export it.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>mean_weight <span class="ot">&lt;-</span> surveys <span class="sc">|&gt;</span> </span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span>  </span>
-<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T),</span>
-<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>mean_weight <span class="ot">&lt;-</span> surveys <span class="sc">|&gt;</span> </span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">group_by</span>(sex) <span class="sc">|&gt;</span>  </span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarise</span>(<span class="at">mean_weight =</span> <span class="fu">mean</span>(weight, <span class="at">na.rm =</span> T),</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a>            <span class="at">n =</span> <span class="fu">n</span>())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Now we can save this data.frame to a CSV using the <code>write_csv()</code> function from the readr package. The first argument is the name of the data.frame, and the second is the path to the new file we want to create, including the file extension <code>.csv</code>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> mean_weight, <span class="at">file =</span> <span class="st">"figures/table_mean_weight.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(<span class="at">x =</span> mean_weight, <span class="at">file =</span> <span class="st">"figures/table_mean_weight.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 
 

@@ -19,8 +19,4 @@ We recommend using two monitors for the workshop to allow you to follow along wh
 
 # Learning Objectives
 
-The primary objective of this workshop is to introduce attendees to the R programming language. By the end of the workshop you will be able to:
-
-- Create basic plots to visualise data in tables/spreadsheets.
-- Explore datasets using vectors, data frames, and functions.
-- Import, manipulate, and export datasets and figures.
+The primary objective of this workshop is to introduce attendees to the R programming language, and to inspire them to continue learning about R.

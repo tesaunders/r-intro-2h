@@ -138,12 +138,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span class="menu-text">2. Plots</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./03_explore.html"> 
-<span class="menu-text">3. Data types</span></a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link" href="./04_dplyr.html"> 
-<span class="menu-text">4. Analysis</span></a>
+    <a class="nav-link" href="./03_dplyr.html"> 
+<span class="menu-text">3. Analysis</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./resources.html"> 
@@ -359,9 +355,44 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </div>
 <p>But it makes your code clearer to name arguments, especially when you’re learning.</p>
-
-
 </section>
+</section>
+<section id="vectors" class="level1">
+<h1>Vectors</h1>
+<p>Vectors are 1-dimensional series of values, and vectors are the basic building blocks of all data in R.</p>
+<p>There are 2 common types of vectors:</p>
+<ol type="1">
+<li><p>“character” for strings of characters (letters). Each entry in a character vector is wrapped in quotes.</p></li>
+<li><p>“numeric” vectors contain numbers including decimals.</p></li>
+</ol>
+<p>To create a vector from scratch, we can use the <code>c()</code> function, putting values inside, separated by commas.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>age <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">12</span>, <span class="dv">4</span>)</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>fruit <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"apple"</span>, <span class="st">"pear"</span>, <span class="st">"grape"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="missing-data" class="level1">
+<h1>Missing data</h1>
+<p>There is an important distinction between 0 and a missing value. A 0 means a 0 was observed, whereas a missing value means there was no observation recorded. R represents missing data as NA, without quotes, in all vector types.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>weights <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">25</span>, <span class="dv">34</span>, <span class="dv">12</span>, <span class="cn">NA</span>, <span class="dv">42</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>R doesn’t make assumptions about how you want to handle missing data, so if we pass this vector to a numeric function like <code>mean()</code> to get the minimum value, it won’t know what to do, so it returns NA.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(weights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p>This is a very good thing, since we won’t accidentally forget to consider our missing data. If we decide to exclude our missing values, many basic mathematical functions have an argument to remove them.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">min</span>(weights, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 12</code></pre>
+</div>
+</div>
+
+
 </section>
 
 </main> <!-- /main -->

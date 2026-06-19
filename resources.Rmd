@@ -1,6 +1,8 @@
 ---
-title: "resources"
+title: "Resources"
 ---
+
+This workshop is a shortened version of a 7 hour workshop called 'Data Carpentry', based on [this online curriculum](https://datacarpentry.github.io/R-ecology-lesson/). It's worth working through the longer lesson to learn more about how R works.
 
 Learners are strongly recommended to work through ['R for Data Science'](https://r4ds.hadley.nz/), a free online book which walks through the basics of data science in R using the `tidyverse` package ecosystem. It is written in an engaging way and teaches the most useful aspects of working with data in R, right up to intermediate concepts such as writing functions and iteration.
 
