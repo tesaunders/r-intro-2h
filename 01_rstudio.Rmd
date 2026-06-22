@@ -157,6 +157,53 @@ When naming objects:
 - be descriptive but concise
 - use a consistent code style (like lower_snake)
 
+### Data Types
+
+R represents this data in particular ways, and the way it represents it determines what operations can be done with it.
+
+The two main data types you'll see are:
+
+- _numeric_, and
+- _character_
+
+We've seen numeric data already e.g. `100`, or `2.2`. 
+
+The character data type (text data) are zero or more characters (e.g. letters, numerals, punctuation, etc) that are enclosed in either single (`'`) or double (`"`) quotation marks -- whichever you open with you need to close with. With character data you can't do mathematical operations. Where this becomes especially important is when reading data into R, making sure that R represents it correctly.
+
+```{r}
+animal  <- "tiger"
+animal
+```
+
+We can see how R is representing the data (the data type) by using `class`
+
+```{r}
+class(weight)
+class(animal)
+```
+
+
+
+With numeric data you can do the usual mathematical operations.
+
+```{r}
+mynum <- 6
+class(mynum)
+mynum * 2
+```
+
+Whereas, even though it looks like the number `6`, because it is enclosed in quotes it is treated as a character datatype and so mathematical operations on characters don't make sense and you get an error.
+
+```{r}
+#| error: true
+
+mychar <- "6"
+class(mychar)
+mychar * 2
+```
+
+The third common data type you will come across is the _logical_ (a.k.a. boolean), which is the values `TRUE` or `FALSE` and is usually the output of a conditional statement (which we'll see later on).
+
 ## Functions
 
 Functions are the workhorse of many programming languages, including R. Functions usually take one or more inputs, do something with the input, and create an output. We can think of a function as a piece of 'canned code' because they are made up of one or many lines of code in the background.
@@ -191,13 +238,7 @@ But it makes your code clearer to name arguments, especially when you're learnin
 
 # Vectors
 
-Vectors are 1-dimensional series of values, and vectors are the basic building blocks of all data in R.
-
-There are 2 common types of vectors:
-
-1. "character" for strings of characters (letters). Each entry in a character vector is wrapped in quotes.
-
-2. "numeric" vectors contain numbers including decimals. 
+Vectors are 1-dimensional series of values, and vectors are the basic building blocks of all data in R. All items in a vector must be of the same data type. 
 
 To create a vector from scratch, we can use the `c()` function, putting values inside, separated by commas.
 
