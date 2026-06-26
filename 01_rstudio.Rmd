@@ -182,8 +182,6 @@ class(weight)
 class(animal)
 ```
 
-
-
 With numeric data you can do the usual mathematical operations.
 
 ```{r}
@@ -203,6 +201,17 @@ mychar * 2
 ```
 
 The third common data type you will come across is the _logical_ (a.k.a. boolean), which is the values `TRUE` or `FALSE` and is usually the output of a conditional statement (which we'll see later on).
+
+# Vectors
+
+Vectors are 1-dimensional series of values, and vectors are the basic building blocks of all data in R. When we assigned values to objects just now we were creating vectors. All items in a vector must be of the same data type. 
+
+To create a vector with multiple values, we can use the `c()` function, putting values inside, separated by commas.
+
+```{r}
+age <- c(1, 2, 5, 12, 4)
+fruit <- c("apple", "pear", "grape")
+```
 
 ## Functions
 
@@ -235,17 +244,6 @@ round(3.1412, 2)
 ```
 
 But it makes your code clearer to name arguments, especially when you're learning.
-
-# Vectors
-
-Vectors are 1-dimensional series of values, and vectors are the basic building blocks of all data in R. All items in a vector must be of the same data type. 
-
-To create a vector from scratch, we can use the `c()` function, putting values inside, separated by commas.
-
-```{r}
-age <- c(1, 2, 5, 12, 4)
-fruit <- c("apple", "pear", "grape")
-```
 
 # Missing data
 
