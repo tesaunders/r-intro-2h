@@ -219,7 +219,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   ..   taxa = col_character(),
   ..   plot_type = col_character()
   .. )
- - attr(*, "problems")=&lt;pointer: 0x5682491938a0&gt; </code></pre>
+ - attr(*, "problems")=&lt;pointer: 0x60da66184470&gt; </code></pre>
 </div>
 </div>
 <p>The <code>$</code> in front of each variable acts as an important operator in R. We can use it to select different columns within a data frame. If we type the name of a data frame followed by a <code>$</code>, RStudio will offer tab completion to select a variable within the data from a list by navigating up and down with the arrow keys and hitting enter, or by clicking on the variable you want.</p>
@@ -295,7 +295,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 # ℹ 4 more variables: genus &lt;chr&gt;, species &lt;chr&gt;, taxa &lt;chr&gt;, plot_type &lt;chr&gt;</code></pre>
 </div>
 </div>
-<p>The <code>==</code> sign means “is equal to”. There are several other operators we can use: - &gt; (greater than) - &gt;= (greater than or equal to) - &lt; (less than) - &lt;= (less than or equal to) - != (not equal to)</p>
+<p>The <code>==</code> sign means “is equal to”. There are several other operators we can use:</p>
+<ul>
+<li><code>&gt;</code> (greater than)</li>
+<li><code>&gt;=</code> (greater than or equal to)</li>
+<li><code>&lt;</code> (less than)</li>
+<li><code>&lt;=</code> (less than or equal to)</li>
+<li><code>!=</code> (not equal to)</li>
+</ul>
 <p>Another useful operator is <code>%in%</code>, which checks if a specified set of values are present in a vector. For example, we can get rows with specific <code>species_id</code> values.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">filter</span>(surveys, species_id <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"RM"</span>, <span class="st">"DO"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
@@ -342,7 +349,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="the-pipe" class="level2">
 <h2 class="anchored" data-anchor-id="the-pipe">The pipe <code>|&gt;</code></h2>
 <p>What happens if we want to both <code>select()</code> and <code>filter()</code> our data?</p>
-<p>Rather than nesting functions inside each other, or creating lots of intermediate objects, we can instead use an elegant solution called the pipe operator. It looks like |&gt;. You can insert it by using the keyboard shortcut <code>Shift+Cmd+M</code> (Mac) or <code>Shift+Ctrl+M</code> (Windows). Here’s how you could use a pipe to select and filter in one step:</p>
+<p>Rather than nesting functions inside each other, or creating lots of intermediate objects, we can instead use an elegant solution called the pipe operator. It looks like <code>|&gt;</code>. You can insert it by using the keyboard shortcut <code>Shift+Cmd+M</code> (Mac) or <code>Shift+Ctrl+M</code> (Windows). Here’s how you could use a pipe to select and filter in one step:</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>surveys <span class="sc">|&gt;</span> </span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="sc">-</span>day) <span class="sc">|&gt;</span>  </span>

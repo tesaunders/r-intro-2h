@@ -47,12 +47,13 @@ Narrows down a data.frame to specific rows based on certain critera. To get all 
 filter(surveys, year == 1985)
 ```
 
-The `==` sign means “is equal to”. There are several other operators we can use: 
-- > (greater than)
-- >= (greater than or equal to)
-- < (less than)
-- <= (less than or equal to)
-- != (not equal to)
+The `==` sign means “is equal to”. There are several other operators we can use:
+
+- `>` (greater than)
+- `>=` (greater than or equal to)
+- `<` (less than)
+- `<=` (less than or equal to)
+- `!=` (not equal to)
 
 Another useful operator is `%in%`, which checks if a specified set of values are present in a vector. For example, we can get rows with specific `species_id` values.
 
@@ -70,7 +71,7 @@ filter(surveys, year <= 1988 & !is.na(hindfoot_length))
 
 What happens if we want to both `select()` and `filter()` our data?  
 
-Rather than nesting functions inside each other, or creating lots of intermediate objects, we can instead use an elegant solution called the pipe operator. It looks like |>. You can insert it by using the keyboard shortcut `Shift+Cmd+M` (Mac) or `Shift+Ctrl+M` (Windows). Here’s how you could use a pipe to select and filter in one step:
+Rather than nesting functions inside each other, or creating lots of intermediate objects, we can instead use an elegant solution called the pipe operator. It looks like `|>`. You can insert it by using the keyboard shortcut `Shift+Cmd+M` (Mac) or `Shift+Ctrl+M` (Windows). Here’s how you could use a pipe to select and filter in one step:
 
 ```{r}
 surveys |> 
